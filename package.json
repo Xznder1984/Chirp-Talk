@@ -1,0 +1,12 @@
+{
+  "name": "chirpntalk",
+  "version": "1.0.0",
+  "description": "A combinaton of twitter threads and reddit combined into one",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

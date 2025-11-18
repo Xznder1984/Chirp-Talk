@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login • Chirp & Talk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="center">
+    <div class="card auth">
+      <div class="brand">Chirp &amp; Talk</div>
+      <input id="username" class="input" placeholder="Username">
+      <input id="password" class="input" type="password" placeholder="Password">
+      <div class="row">
+        <button id="loginBtn" class="primary">Login</button>
+        <button id="signupBtn" class="ghost">Sign up</button>
+      </div>
+      <div id="authMsg" class="hint"></div>
+    </div>
+  </main>
+  <script>
+    async function request(path, method, body) {
+      const res = await fetch(path, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body||{}) })
+      const data = await res.json().catch(()=>({}))
+      return { ok: res.ok, data }
+    }
+    async function login() {
+      const u = document.getElementById('username').value.trim()
+      const p = document.getElementById('password').value
+      const r = await request('/api/login', 'POST', { username: u, password: p })
+      if (!r.ok) return show('Invalid credentials')
+      localStorage.setItem('ct_token', r.data.token)
+      location.href = '/'
+    }
+    async function signup() {
+      const u = document.getElementById('username').value.trim()
+      const p = document.getElementById('password').value
+      const r = await request('/api/signup', 'POST', { username: u, password: p })
+      if (!r.ok) return show('User exists or invalid')
+      localStorage.setItem('ct_token', r.data.token)
+      location.href = '/'
+    }
+    function show(msg) {
+      const el = document.getElementById('authMsg')
+      el.textContent = msg
+    }
+    document.getElementById('loginBtn').onclick = login
+    document.getElementById('signupBtn').onclick = signup
+  </script>
+</body>
+</html>
